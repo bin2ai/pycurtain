@@ -1,6 +1,6 @@
 # Pycurtain
 
-A community-maintained python package for wrapping a variety of REST API calls for a variety of different AI art models.  Think "curtain" like what is seen in an art gallery. This tool lets the developer close the curtains and only focus on implementing one code base for any supported AI art models.
+A community-maintained python package for wrapping REST APIs that interface with a variety of different AI art models.  Think "curtain" like what is seen in an art gallery. This tool lets the developer close the curtains and only focus on implementing one code base for any supported AI art models.
 
 ![](pycurtain.png?raw=true)
 
@@ -42,5 +42,4 @@ To install pycurtain, along with the tools you need to develop and run test, run
 
 ```
 pip install -e .[dev]
-
 ```
