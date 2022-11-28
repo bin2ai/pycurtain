@@ -1,14 +1,12 @@
 import os
+from typing import Generator
 from PIL import Image
 from random import randint
 import warnings
 from io import BytesIO
-
 from stability_sdk import client
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
-
 # local imports
-from pycurtain.img2img.template import Img2Img
 import pycurtain.secrete.stuff as shh
 
 
@@ -16,7 +14,7 @@ global stability_api
 stability_api = None
 
 
-class StabilityAI(Img2Img):
+class StabilityAI():
     def __init__(self, api_key: str = None):
 
         self.api_key = api_key
@@ -34,7 +32,36 @@ class StabilityAI(Img2Img):
             verbose=True,
         )
 
-    def run(self, img_i: Image.Image, prompt: str, img_m: Image.Image = None, seed: int = None) -> Image.Image:
+    def generate(self, prompt: str, seed: int = None) -> Image.Image:
+
+        if prompt is None:
+            raise Exception("Prompt cannot be None")
+
+        if seed is None:
+            seed = randint(0, 1000000)
+
+        # create a request
+        answers = stability_api.generate(
+            prompt=prompt,
+            sampler=generation.SAMPLER_K_DPM_2_ANCESTRAL,
+            seed=seed,
+            guidance_preset=generation.GUIDANCE_PRESET_SIMPLE,
+            guidance_strength=0.5,
+        )
+        img_o = self.__download_img(answers)
+        return img_o
+
+    def edit(self, prompt: str,  img_i: Image.Image, img_m: Image.Image, seed: int = None) -> Image.Image:
+
+        if prompt is None:
+            raise Exception("Prompt cannot be None")
+
+        if img_i is None:
+            raise Exception("Image cannot be None")
+
+        if img_m is None:
+            raise Exception("Mask cannot be None")
+
         if seed is None:
             seed = randint(0, 1000000)
 
@@ -46,11 +73,41 @@ class StabilityAI(Img2Img):
             sampler=generation.SAMPLER_K_DPM_2_ANCESTRAL,
             seed=seed,
             guidance_preset=generation.GUIDANCE_PRESET_SIMPLE,
+            guidance_strength=0.75,
+            start_schedule=0.7,
+            end_schedule=0.01,
+        )
+
+        img_o = self.__download_img(answers)
+        return img_o
+
+    def vary(self, prompt: str,  img_i: Image.Image, seed: int = None) -> Image.Image:
+
+        if prompt is None:
+            raise Exception("Prompt cannot be None")
+
+        if img_i is None:
+            raise Exception("Image cannot be None")
+
+        if seed is None:
+            seed = randint(0, 1000000)
+
+        # create a request
+        answers = stability_api.generate(
+            prompt=prompt,
+            init_image=img_i,
+            sampler=generation.SAMPLER_K_DPM_2_ANCESTRAL,
+            seed=seed,
+            guidance_preset=generation.GUIDANCE_PRESET_SIMPLE,
             guidance_strength=0.5,
             start_schedule=0.6,
             end_schedule=0.01,
         )
 
+        img_o = self.__download_img(answers)
+        return img_o
+
+    def __download_img(self, answers:  Generator[generation.Answer, None, None]) -> Image.Image:
         # iterating over the generator produces the api response
         for resp in answers:
             for artifact in resp.artifacts:

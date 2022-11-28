@@ -1,48 +1,44 @@
 import os
 from PIL import Image
 import requests
-from io import BytesIO
-
 # local imports
-from pycurtain.upscaler.template import Upscaler
 import pycurtain.secrete.stuff as shh
+from pycurtain.utility.image import pil_img_to_byte_array, download_img
 
 
-class DeepAI(Upscaler):
+class DeepAI():
 
     def __init__(self, api_key: str = None):
 
-        self.api_key = api_key
-
         # get os environment variable deep_ai, raise exception if not found
+        self.api_key = api_key
         if self.api_key is None:
             self.api_key = os.environ.get(shh.DEEP_AI_API_KEY)
             if self.api_key is None:
                 raise Exception(
                     "DEEP AI API KEY environment variable not found")
 
-    def run(self, img_i: Image.Image, scale: int = 1) -> Image.Image:
+    # takes image and returns upsampled image
+    def upscale(self, img_i: Image.Image) -> Image.Image:
 
         if img_i is None:
             raise Exception("img_i is None")
 
         # get the image as a byte array
-        img_byte_arr = BytesIO()
-        img_i.save(img_byte_arr, format=img_i.format)
-        img_byte_arr = img_byte_arr.getvalue()
+        img_i_bytes = pil_img_to_byte_array(img_i)
 
         # create the request
         data = requests.post(
             "https://api.deepai.org/api/torch-srgan",
             files={
-                'image': img_byte_arr
+                'image': img_i_bytes
             },
             headers={'api-key': self.api_key}
         ).json()
 
-        for key in data:
-            print(key)
-            print(data[key])
+        # for key in data:
+        #     print(key)
+        #     print(data[key])
 
         if 'output_url' in data:
             url = data['output_url']
@@ -50,8 +46,7 @@ class DeepAI(Upscaler):
             return None
 
         # download the image from the response
-        response = requests.get(url)
-        img_o = Image.open(BytesIO(response.content))
+        img_o = download_img(url)
 
         # return the image
         return img_o
