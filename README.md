@@ -16,13 +16,22 @@ There are tasks (image-related) and sources (AI art models) that are supported. 
 
 ```python
 from PIL import Image
+from typing import List
 import pycurtain
 
-source = pycurtain.source.SourceType.STABILILTY_AI
+source = pycurtain.source.SourceType.STABLE_DIFFUSION
 prompt:str = "A blooming flower in the middle of a desert"
-img_o : Image.Image = pycurtain.task.image.generate(source, prompt)
+img_o : List[Image.Image] = pycurtain.task.image.generate(source, prompt)[0]
 img_o.save('output.png')
 ```
+
+## Supported Tasks
+
+ Image Creation
+
+- [x] generate (text2img, creation)
+- [x] vary (img2img, style transfer)
+- [x] edit (img2img, with masks)
 
 # AI Model Sources
 
@@ -32,25 +41,22 @@ No API Key or private information is stored by Pycurtain.
 
 ## Sources Offical Sites
 
-* deep_ai <https://deepai.org/>
-* stability_sdk <https://stability.ai/>
-* open-ai dalle2 <https://openai.com/>
+- [x] DeepAi SRGAN <https://deepai.org/>
+- [x] StabilityAi Stable Diffusion <https://stability.ai/>
+- [x] OpenAi Dalle2 <https://openai.com/>
+- [x] Craiyon (Formally DALL-E Mini) <https://www.craiyon.com/>
 
 # Road Map
 
-* provide prelimiary wrappers for these AI model sources
-  * craiyon <https://www.craiyon.com/>
-  * replicate_ai <https://replicate.com/>
-  * hugging_face <https://huggingface.co/>
-  * ~stability_ai~
-  * ~deep_ai~
-  * ~open_ai dalle2~
+- provide prelimiary wrappers for these AI model sources
+  - replicate_ai <https://replicate.com/>
+  - hugging_face <https://huggingface.co/>
 
-* allow users to adjust common parameters between models
-* provide utility features beyond the model wrapper
-  * equirectangluar images (360 degree images)
-  * simple inpainting mask creation
-* beyond images... videos, text, audio.  All leveraging the available REST API accessible ML models of today.
+- allow users to adjust common parameters between models
+- provide utility features beyond the model wrapper
+  - equirectangluar images (360 degree images)
+  - simple inpainting mask creation
+- beyond images... videos, text, audio.  All leveraging the available REST API accessible ML models of today.
 
 # Developing Pycurtain
 
