@@ -9,10 +9,13 @@ def test_generate(source_type: Source.SourceType):
     prompt = "test"
     source = Source.Source_AI(source_type=source_type)
     # act
-    img_o = Image_AI.generate(source, prompt)
-    img_o.save("tests\\test_001.png")
+    img_o_lst = Image_AI.generate(source, prompt)
+    for i, img_o in enumerate(img_o_lst):
+        # save image as rgba png
+        img_o.save("tests\\test_001_generate_" +
+                   str(i) + str(source_type) + ".png")
     # assert
-    assert img_o is not None
+    assert img_o_lst is not None
 
 
 # test task\image\__init__.py edit
@@ -23,11 +26,14 @@ def test_edit(source_type: Source.SourceType):
     img_m = Image.open("tests\\test_001_mask.png")
     source = Source.Source_AI(source_type=source_type)
     # act
-    img_o = Image_AI.edit(source=source, prompt=prompt,
-                          img_i=img_i, img_m=img_m)
-    img_o.save("tests\\test_001_edit.png")
+    img_o_lst = Image_AI.edit(source=source, prompt=prompt,
+                              img_i=img_i, img_m=img_m)
+    for i, img_o in enumerate(img_o_lst):
+        # save image as rgba png
+        img_o.save("tests\\test_001_edit_" +
+                   str(i) + str(source_type) + ".png")
     # assert
-    assert img_o is not None
+    assert img_o_lst is not None
 
 
 # test task\image\__init__.py vary
@@ -37,10 +43,15 @@ def test_vary(source_type: Source.SourceType):
     img_i = Image.open("tests\\test.png")
     source = Source.Source_AI(source_type=source_type)
     # act
-    img_o = Image_AI.vary(source=source, prompt=prompt, img_i=img_i)
-    img_o.save("tests\\test_001_vary.png")
+    img_o_lst = Image_AI.vary(source=source, prompt=prompt, img_i=img_i)
+
+    for i, img_o in enumerate(img_o_lst):
+        # save image as rgba png
+        img_o.save("tests\\test_001_vary_" +
+                   str(i) + str(source_type) + ".png")
+
     # assert
-    assert img_o is not None
+    assert img_o_lst is not None
 
 
 # test task\image\__init__.py upscale
@@ -49,9 +60,13 @@ def test_upscale(source_type: Source.SourceType):
     img_i = Image.open("tests\\test.png")
     source = Source.Source_AI(source_type=source_type)
     # act
-    img_o = Image_AI.upscale(source, img_i)
-    # save image as rgba png
-    img_o.save("tests\\test_001_upscale.png")
+    img_o_lst = Image_AI.upscale(source, img_i)
+
+    for i, img_o in enumerate(img_o_lst):
+        # save image as rgba png
+        img_o.save("tests\\test_001_upscale_" +
+                   str(i) + str(source_type) + ".png")
+
     # assert
     assert img_o is not None
 
@@ -94,4 +109,6 @@ if __name__ == "__main__":
     # test_edit(Source.SourceType.DALLE2)
     # test_vary(Source.SourceType.STABLE_DIFFUSION)
     # test_vary(Source.SourceType.DALLE2)
-    test_upscale(Source.SourceType.DEEP_AI)
+    # test_upscale(Source.SourceType.DEEP_AI)
+
+    test_generate(Source.SourceType.CRAIYON)

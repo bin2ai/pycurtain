@@ -1,14 +1,16 @@
 from enum import Enum
 # local imports
-import pycurtain.source.dalle2 as dalle2
-import pycurtain.source.stable_diffusion as stable_diffusion
-import pycurtain.source.deep_ai as deep_ai
+from pycurtain.source.craiyon import Craiyon
+from pycurtain.source.dalle2 import DALLE2
+from pycurtain.source.deep_ai import DeepAI
+from pycurtain.source.stable_diffusion import StabilityAI
 
 
 class SourceType(Enum):
     STABLE_DIFFUSION = 0
     DEEP_AI = 1
     DALLE2 = 2
+    CRAIYON = 3
 
 
 class Source_AI():
@@ -16,10 +18,12 @@ class Source_AI():
         self.source_type = source_type
         self.api_key = api_key
         if source_type == SourceType.STABLE_DIFFUSION:
-            self.source = stable_diffusion.StabilityAI(api_key)
+            self.source = StabilityAI(api_key)
         elif source_type == SourceType.DALLE2:
-            self.source = dalle2.DALLE2(api_key)
+            self.source = DALLE2(api_key)
         elif source_type == SourceType.DEEP_AI:
-            self.source = deep_ai.DeepAI(api_key)
+            self.source = DeepAI(api_key)
+        elif source_type == SourceType.CRAIYON:
+            self.source = Craiyon()
         else:
             raise Exception("Invalid source type")

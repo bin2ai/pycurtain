@@ -1,3 +1,4 @@
+import base64
 from io import BytesIO
 from PIL import Image
 import requests
@@ -32,4 +33,11 @@ def pixel_transparency(img: Image.Image, pixel_value: tuple) -> Image.Image:
         else:
             newData.append(item)
     img.putdata(newData)
+    return img
+
+
+# convert base64 to Pil.Image
+def base64_to_pil(img_base64: str):
+    img_bytes = base64.b64decode(img_base64)
+    img = Image.open(BytesIO(img_bytes))
     return img

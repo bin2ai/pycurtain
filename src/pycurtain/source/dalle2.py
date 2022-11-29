@@ -1,5 +1,6 @@
 from enum import Enum
 import os
+from typing import List
 from PIL import Image
 import openai
 # local imports
@@ -28,7 +29,7 @@ class DALLE2():
             openai.api_key = self.api_key
 
     # takes prompt and returns output image
-    def generate(self, prompt: str, size: SizeType = SizeType.MEDIUM) -> Image.Image:
+    def generate(self, prompt: str, size: SizeType = SizeType.MEDIUM) -> List[Image.Image]:
 
         if prompt is None:
             raise Exception("Prompt is required")
@@ -44,10 +45,11 @@ class DALLE2():
         img_url = res["data"][0]["url"]
         # download img
         img_o = download_img(img_url)
-        return img_o
+        # wrap image in list
+        return [img_o]
 
     # takes prompt image and mask and returns output image
-    def edit(self, prompt: str, img_i: Image.Image, img_m: Image.Image, size: SizeType = SizeType.MEDIUM) -> Image.Image:
+    def edit(self, prompt: str, img_i: Image.Image, img_m: Image.Image, size: SizeType = SizeType.MEDIUM) -> List[Image.Image]:
 
         if prompt is None:
             raise Exception("Prompt is required")
@@ -77,10 +79,12 @@ class DALLE2():
         img_url = res["data"][0]["url"]
         # download_img
         img_o = download_img(img_url)
-        return img_o
+
+        # wrap image in list
+        return [img_o]
 
     # takes prompt image and returns a variation of the image
-    def vary(self, img_i: Image.Image, size: SizeType = SizeType.MEDIUM) -> Image.Image:
+    def vary(self, img_i: Image.Image, size: SizeType = SizeType.MEDIUM) -> List[Image.Image]:
 
         if img_i is None:
             raise Exception("Image input is None")
@@ -98,7 +102,8 @@ class DALLE2():
         img_url = res["data"][0]["url"]
         # download_img
         img_o = download_img(img_url)
-        return img_o
+        # wrap image in list
+        return [img_o]
 
 
 # convert size type to string

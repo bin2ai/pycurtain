@@ -1,4 +1,5 @@
 import os
+from typing import List
 from PIL import Image
 import requests
 # local imports
@@ -19,7 +20,7 @@ class DeepAI():
                     "DEEP AI API KEY environment variable not found")
 
     # takes image and returns upsampled image
-    def upscale(self, img_i: Image.Image) -> Image.Image:
+    def upscale(self, img_i: Image.Image) -> List[Image.Image]:
 
         if img_i is None:
             raise Exception("img_i is None")
@@ -48,5 +49,5 @@ class DeepAI():
         # download the image from the response
         img_o = download_img(url)
 
-        # return the image
-        return img_o
+        # wrap image in list
+        return [img_o]

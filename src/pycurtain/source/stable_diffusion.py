@@ -1,5 +1,5 @@
 import os
-from typing import Generator
+from typing import Generator, List
 from PIL import Image
 from random import randint
 import warnings
@@ -32,7 +32,7 @@ class StabilityAI():
             verbose=True,
         )
 
-    def generate(self, prompt: str, seed: int = None) -> Image.Image:
+    def generate(self, prompt: str, seed: int = None) -> List[Image.Image]:
 
         if prompt is None:
             raise Exception("Prompt cannot be None")
@@ -49,9 +49,10 @@ class StabilityAI():
             guidance_strength=0.5,
         )
         img_o = self.__download_img(answers)
-        return img_o
+        # wrap image in list
+        return [img_o]
 
-    def edit(self, prompt: str,  img_i: Image.Image, img_m: Image.Image, seed: int = None) -> Image.Image:
+    def edit(self, prompt: str,  img_i: Image.Image, img_m: Image.Image, seed: int = None) -> List[Image.Image]:
 
         if prompt is None:
             raise Exception("Prompt cannot be None")
@@ -79,9 +80,10 @@ class StabilityAI():
         )
 
         img_o = self.__download_img(answers)
-        return img_o
+        # wrap image in list
+        return [img_o]
 
-    def vary(self, prompt: str,  img_i: Image.Image, seed: int = None) -> Image.Image:
+    def vary(self, prompt: str,  img_i: Image.Image, seed: int = None) -> List[Image.Image]:
 
         if prompt is None:
             raise Exception("Prompt cannot be None")
@@ -105,7 +107,8 @@ class StabilityAI():
         )
 
         img_o = self.__download_img(answers)
-        return img_o
+        # wrap image in list
+        return [img_o]
 
     def __download_img(self, answers:  Generator[generation.Answer, None, None]) -> Image.Image:
         # iterating over the generator produces the api response
