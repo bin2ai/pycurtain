@@ -111,4 +111,6 @@ if __name__ == "__main__":
     # test_vary(Source.SourceType.DALLE2)
     # test_upscale(Source.SourceType.DEEP_AI)
 
-    test_generate(Source.SourceType.CRAIYON)
+    # test_generate(Source.SourceType.CRAIYON)
+    # test text summarize
+    pass
