@@ -2,6 +2,7 @@ import datetime
 import os
 from typing import List, Tuple
 import openai
+from transformers import GPT2Tokenizer
 
 
 class GPT3():
@@ -13,25 +14,56 @@ class GPT3():
                 raise Exception(
                     "OPENAI API KEY environment variable not found")
         openai.api_key = os.getenv("OPENAI_API_KEY")
+        self.tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
     # summarize prompt
-    def summarize(self, prompt: str, max_tokens: int = 100):
+
+    def summarize(self, prompt: str, max_tokens_res: int = 100) -> str:
+        # split prompt into chunks no more than 1000 tokens
+        prompt_chunks = self.__split_text_by_tokens(
+            prompt, 4000-max_tokens_res)
+        # summarize each chunk
+        summaries = []
+        for chunk in prompt_chunks:
+            summaries.append(self.__summarize(chunk, max_tokens_res))
+        # join summaries
+        summary = " ".join(summaries)
+        return summary
+
+    # summarize prompt
+
+    def __summarize(self, prompt: str, max_tokens: int = 100):
 
         res = openai.Completion.create(
             model="text-davinci-003",
             prompt="{}\n\ntl;dr".format(prompt),
-            max_tokens=100,
+            max_tokens=max_tokens,
             temperature=0
         )
 
         return self.__parse_completion(res)
 
     # fix grammar from prompt
-    def fix_grammar(self, prompt: str, max_tokens: int = 100) -> str:
+
+    def fix_grammar(self, prompt: str, max_tokens_res: int = 2000) -> str:
+        # split prompt into chunks no more than 1000 tokens
+        prompt_chunks = self.__split_text_by_tokens(
+            prompt, 4000-max_tokens_res)
+        # fix grammar for each chunk
+        text = []
+        for chunk in prompt_chunks:
+            text.append(self.__fix_grammar(chunk, max_tokens_res))
+        # join summaries
+        summary = " ".join(text)
+        return summary
+
+    # fix grammar from prompt
+
+    def __fix_grammar(self, prompt: str, max_tokens: int = 100) -> str:
         res = openai.Completion.create(
             model="text-davinci-003",
             prompt="{}\n\nfix the spelling errors.".format(prompt),
-            max_tokens=1000,
+            max_tokens=max_tokens,
             temperature=0
         )
 
@@ -39,7 +71,7 @@ class GPT3():
 
     # list gpt models
 
-    def list_models_by_date():
+    def __list_models_by_date():
 
         models = openai.Model.list()['data']
 
@@ -56,6 +88,8 @@ class GPT3():
         # sort by timestamp
         ts_ids = dict(sorted(ts_ids.items(), key=lambda item: item[0]))
         return ts_ids
+
+    # convert prompt to tags
 
     def tag(self, prompt: str, max_tokens: int = 100) -> List[Tuple[str, str]]:
         res = openai.Completion.create(
@@ -82,4 +116,19 @@ class GPT3():
         completion_tokens = usage["completion_tokens"]
         total_tokens = usage["total_tokens"]
 
-        return "".join(text)
+    def __text_to_tokens(self, text: str) -> int:
+        return self.tokenizer(text)['input_ids']
+
+    def __split_text_by_tokens(self, text: str, size: int) -> List[str]:
+        tokens = self.__text_to_tokens(text)
+        lst = []
+        tmp = []
+        # create list of lists where each sublist is no more than size tokens
+        for token in tokens:
+            tmp.append(token)
+            if len(tmp) >= size:
+                lst.append(tmp)
+                tmp = []
+        # convert each sublist to text
+        lst = [self.tokenizer.decode(x) for x in lst]
+        return lst
