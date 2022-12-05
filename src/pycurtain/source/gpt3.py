@@ -94,7 +94,7 @@ class GPT3():
     def tag(self, prompt: str, max_tokens: int = 100) -> List[Tuple[str, str]]:
         res = openai.Completion.create(
             model="text-davinci-003",
-            prompt="List tags relating to subject, genre, subgenre, etc.{}\n\n:".format(
+            prompt="list tags about subject\ni.e.\nsubject: apples\ntags: food, fruit, red, juicy, healthy, tart, crunchy, pies, cider, juice, snacks, pie, dessert\nsubject: {}\ntags:\n".format(
                 prompt),
             max_tokens=max_tokens,
             temperature=0
@@ -102,19 +102,21 @@ class GPT3():
 
         return self.__parse_completion(res)
 
-    def __parse_completion(self, res):
+    def __parse_completion(self, res) -> str:
         task_type = res["object"]
         created_ts = res["created"]
         choices = res["choices"]
 
         text = []
         for choice in choices:
-            text.append((choice["text"]))
+            text.append(choice["text"])
             choice["finish_reason"]
+
         usage = res["usage"]
         prompt_tokens = usage["prompt_tokens"]
         completion_tokens = usage["completion_tokens"]
         total_tokens = usage["total_tokens"]
+        return " ".join(text)
 
     def __text_to_tokens(self, text: str) -> int:
         return self.tokenizer(text)['input_ids']
@@ -129,6 +131,8 @@ class GPT3():
             if len(tmp) >= size:
                 lst.append(tmp)
                 tmp = []
+        if len(tmp) > 0:
+            lst.append(tmp)
         # convert each sublist to text
         lst = [self.tokenizer.decode(x) for x in lst]
         return lst
