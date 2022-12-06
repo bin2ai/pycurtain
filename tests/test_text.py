@@ -6,7 +6,7 @@ import pycurtain.task.text as Text_AI
 
 def summarize(prompt: str, max_tokens: int = 100):
     # arrange
-    source = Source.Source_AI(source_type=Source.SourceType.GPT3)
+    source = Source.SourceImage(source_type=Source.SourceImageType.GPT3)
     # act
     res = Text_AI.summarize(source, prompt, max_tokens)
     # assert
@@ -18,7 +18,7 @@ def summarize(prompt: str, max_tokens: int = 100):
 
 def fix_grammar(prompt: str):
     # arrange
-    source = Source.Source_AI(source_type=Source.SourceType.GPT3)
+    source = Source.SourceImage(source_type=Source.SourceImageType.GPT3)
     # act
     res = Text_AI.fix_grammar(source, prompt)
     # assert
@@ -28,7 +28,7 @@ def fix_grammar(prompt: str):
 
 def tag(prompt: str):
     # arrange
-    source = Source.Source_AI(source_type=Source.SourceType.GPT3)
+    source = Source.SourceImage(source_type=Source.SourceImageType.GPT3)
     # act
     res = Text_AI.tag(source, prompt)
     # assert

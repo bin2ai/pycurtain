@@ -3,9 +3,10 @@ import requests
 from PIL import Image
 # local imports
 from pycurtain.utility.image import base64_to_pil
+from pycurtain.source.protos.image import TaskImage
 
 
-class Craiyon():
+class Craiyon(TaskImage):
     def __init__(self):
         pass
 

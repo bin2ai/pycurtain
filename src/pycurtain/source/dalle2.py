@@ -6,6 +6,7 @@ import openai
 # local imports
 import pycurtain.secrete.stuff as shh
 from pycurtain.utility.image import download_img, pil_img_to_byte_array, pixel_transparency
+from pycurtain.source.protos.image import TaskImage
 
 
 # image size types
@@ -16,7 +17,7 @@ class SizeType(Enum):
 
 
 # DALLE2 model access from OpenAI
-class DALLE2():
+class DALLE2(TaskImage):
     def __init__(self, api_key: str = None):
         self.api_key = api_key
         # get os environment variable deep_ai, raise exception if not found

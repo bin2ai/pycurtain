@@ -8,30 +8,41 @@ from pycurtain.source.replicate_stable_diffusion import ReplicateStableDiffusion
 from pycurtain.source.stable_diffusion import StabilityAI
 
 
-class SourceType(Enum):
+class SourceImageType(Enum):
     STABLE_DIFFUSION = 0
     DEEP_AI = 1
     DALLE2 = 2
     CRAIYON = 3
-    GPT3 = 4
-    REPLICATE = 5
+    REPLICATE = 4
 
 
-class Source_AI():
-    def __init__(self, source_type: SourceType, api_key: str = None):
+class SourceImage():
+    def __init__(self, source_type: SourceImageType, api_key: str = None):
         self.source_type = source_type
         self.api_key = api_key
-        if source_type == SourceType.STABLE_DIFFUSION:
+        if source_type == SourceImageType.STABLE_DIFFUSION:
             self.source = StabilityAI(api_key)
-        elif source_type == SourceType.DALLE2:
+        elif source_type == SourceImageType.DALLE2:
             self.source = DALLE2(api_key)
-        elif source_type == SourceType.DEEP_AI:
+        elif source_type == SourceImageType.DEEP_AI:
             self.source = DeepAI(api_key)
-        elif source_type == SourceType.CRAIYON:
+        elif source_type == SourceImageType.CRAIYON:
             self.source = Craiyon()
-        elif source_type == SourceType.GPT3:
-            self.source = GPT3(api_key)
-        elif source_type == SourceType.REPLICATE:
+        elif source_type == SourceImageType.REPLICATE:
             self.source = ReplicateStableDiffusion(api_key)
+        else:
+            raise Exception("Invalid source type")
+
+
+class SourceTextType(Enum):
+    GPT3 = 0
+
+
+class SourceText():
+    def __init__(self, source_type: SourceTextType, api_key: str = None):
+        self.source_type = source_type
+        self.api_key = api_key
+        if source_type == SourceTextType.GPT3:
+            self.source = GPT3(api_key)
         else:
             raise Exception("Invalid source type")

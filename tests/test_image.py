@@ -1,15 +1,16 @@
+from typing import List
 from PIL import Image, ImageDraw
 import pycurtain.source as Source
-import pycurtain.task.image as Image_AI
-
+from pycurtain.task import Image as Image_AI
+from pycurtain.source import SourceImage, SourceImageType, SourceText, SourceTextType
 
 # test task\image\__init__.py generate
-def test_generate(source_type: Source.SourceType):
+
+
+def test_generate(source_type: Source.SourceImageType):
     # arrange
     prompt = "test"
-    source = Source.Source_AI(source_type=source_type)
-    # act
-    img_o_lst = Image_AI.generate(source, prompt)
+    img_o_lst = Image_AI(source_type).generate(prompt)
     for i, img_o in enumerate(img_o_lst):
         # save image as rgba png
         img_o.save("tests\\test_001_generate_" +
@@ -19,7 +20,7 @@ def test_generate(source_type: Source.SourceType):
 
 
 # test task\image\__init__.py edit
-def test_edit(source_type: Source.SourceType):
+def test_edit(source_type: Source.SourceImageType):
     # arrange
     prompt = "a lab experiment test"
     img_i = Image.open("tests\\test.png")
@@ -28,10 +29,9 @@ def test_edit(source_type: Source.SourceType):
     draw = ImageDraw.Draw(img_m)
     draw.ellipse((0, 0) + img_m.size, fill=255)
 
-    source = Source.Source_AI(source_type=source_type)
     # act
-    img_o_lst = Image_AI.edit(source=source, prompt=prompt,
-                              img_i=img_i, img_m=img_m)
+    img_o_lst: List[Image.Image] = Image_AI(source_type).edit(prompt=prompt,
+                                                              img_i=img_i, img_m=img_m)
     for i, img_o in enumerate(img_o_lst):
         # save image as rgba png
         img_o.save("tests\\test_001_edit_" +
@@ -41,13 +41,13 @@ def test_edit(source_type: Source.SourceType):
 
 
 # test task\image\__init__.py vary
-def test_vary(source_type: Source.SourceType):
+def test_vary(source_type: Source.SourceImageType):
     # arrange
     prompt = "test"
     img_i = Image.open("tests\\test.png")
-    source = Source.Source_AI(source_type=source_type)
+    source = Source.SourceImage(source_type=source_type)
     # act
-    img_o_lst = Image_AI.vary(source=source, prompt=prompt, img_i=img_i)
+    img_o_lst = Image_AI(source_type).vary(prompt=prompt, img_i=img_i)
 
     for i, img_o in enumerate(img_o_lst):
         # save image as rgba png
@@ -59,10 +59,10 @@ def test_vary(source_type: Source.SourceType):
 
 
 # test task\image\__init__.py upscale
-def test_upscale(source_type: Source.SourceType):
+def test_upscale(source_type: Source.SourceImageType):
     # arrange
     img_i = Image.open("tests\\test.png")
-    source = Source.Source_AI(source_type=source_type)
+    source = Source.SourceImage(source_type=source_type)
     # act
     img_o_lst = Image_AI.upscale(source, img_i)
 
@@ -106,8 +106,8 @@ def invert(img: Image.Image) -> Image.Image:
 if __name__ == "__main__":
 
     # assert tests for all valid source types
-    # test_generate(Source.SourceType.STABLE_DIFFUSION)
-    # test_generate(Source.SourceType.DALLE2)
+    # test_generate(Source.SourceImageType.STABLE_DIFFUSION)
+    # test_generate(Source.SourceImageType.DALLE2)
     # mask = create_circle_mask((512, 512)).save("tests\\test_001_mask.png")
     # test_edit(Source.SourceType.STABLE_DIFFUSION)
     # test_edit(Source.SourceType.DALLE2)
@@ -117,8 +117,8 @@ if __name__ == "__main__":
     # test_generate(Source.SourceType.CRAIYON)
 
     # test replicate
-    # test_generate(Source.SourceType.REPLICATE)
-    # test_edit(Source.SourceType.REPLICATE)
-    # test_vary(Source.SourceType.REPLICATE)
+    # test_generate(Source.SourceImageType.REPLICATE)
+    # test_edit(Source.SourceImageType.REPLICATE)
+    test_vary(Source.SourceImageType.REPLICATE)
 
     pass

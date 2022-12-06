@@ -5,9 +5,10 @@ import requests
 # local imports
 import pycurtain.secrete.stuff as shh
 from pycurtain.utility.image import pil_img_to_byte_array, download_img
+from pycurtain.source.protos.image import TaskImage
 
 
-class DeepAI():
+class DeepAI(TaskImage):
 
     def __init__(self, api_key: str = None):
 

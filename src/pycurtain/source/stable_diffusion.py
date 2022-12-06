@@ -8,13 +8,14 @@ from stability_sdk import client
 import stability_sdk.interfaces.gooseai.generation.generation_pb2 as generation
 # local imports
 import pycurtain.secrete.stuff as shh
+from pycurtain.source.protos.image import TaskImage
 
 
 global stability_api
 stability_api = None
 
 
-class StabilityAI():
+class StabilityAI(TaskImage):
     def __init__(self, api_key: str = None):
 
         self.api_key = api_key

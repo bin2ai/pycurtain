@@ -5,9 +5,10 @@ import openai
 from transformers import GPT2Tokenizer
 # local imports
 import pycurtain.secrete.stuff as shh
+from pycurtain.source.protos.text import TaskText
 
 
-class GPT3():
+class GPT3(TaskText):
     def __init__(self, api_key: str = None):
         self.api_key = api_key
         if self.api_key is None:

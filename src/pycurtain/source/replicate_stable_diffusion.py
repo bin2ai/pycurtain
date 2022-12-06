@@ -6,9 +6,11 @@ import replicate
 # local imports
 from pycurtain.utility.image import download_img, pil_to_base64
 import pycurtain.secrete.stuff as shh
-
+from pycurtain.source.protos.image import TaskImage
 
 # list all valid pixel scalars as enum
+
+
 class Pixels(enum.Enum):
     pixels_128: int = 128
     pixels_256: int = 256
@@ -25,7 +27,7 @@ class Pixels(enum.Enum):
     pixels_1024: int = 1024
 
 
-class ReplicateStableDiffusion():
+class ReplicateStableDiffusion(TaskImage):
 
     # find versions here
     # https://replicate.ai/stability-ai/stable-diffusion/versions
@@ -82,7 +84,7 @@ class ReplicateStableDiffusion():
         img = download_img(url)
         return [img]
 
-    def vary(self, img_i: Image.Image, width: Pixels = Pixels.pixels_512, height: Pixels = Pixels.pixels_512, seed: int = None) -> List[Image.Image]:
+    def vary(self, img_i: Image.Image, width: Pixels = Pixels.pixels_512, height: Pixels = Pixels.pixels_512, seed: int = None, prompt: str = None) -> List[Image.Image]:
         width, height = self.__validate_size(width, height)
         img_i = pil_to_base64(img_i)
         url = self.version.predict(
