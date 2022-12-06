@@ -15,13 +15,11 @@ pip install pycurtain
 There are tasks (image-related) and sources (AI art models) that are supported.  The following is an example of how to use the package to generate an image from a model source.
 
 ```python
-from PIL import Image
-from typing import List
 import pycurtain
 
 source = pycurtain.source.SourceType.STABLE_DIFFUSION
-prompt:str = "A blooming flower in the middle of a desert"
-img_o : List[Image.Image] = pycurtain.task.image.generate(source, prompt)[0]
+prompt = "A blooming flower in the middle of a desert"
+img_o = pycurtain.task.image.generate(source, prompt)[0]
 img_o.save('output.png')
 ```
 
@@ -51,11 +49,11 @@ No API Key or private information is stored by Pycurtain.
 - [x] StabilityAi Stable Diffusion <https://stability.ai/>
 - [x] OpenAi Dalle2, GPT3 <https://openai.com/>
 - [x] Craiyon (Formally DALL-E Mini) <https://www.craiyon.com/>
+- [x] Replicate <https://replicate.com/>
 
 # Road Map
 
 - provide prelimiary wrappers for these AI model sources
-  - replicate_ai <https://replicate.com/>
   - hugging_face <https://huggingface.co/>
 
 - allow users to adjust common parameters between models

@@ -23,6 +23,7 @@ setup(
         'pillow>=9.3.0',
         'requests>=2.28.1',
         'stability-sdk>=0.2.9',
+        'replicate>=0.4.0',
     ],
     extras_require={
         'dev': [

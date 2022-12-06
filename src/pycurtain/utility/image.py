@@ -13,9 +13,11 @@ def download_img(url: str) -> Image.Image:
 
 # convert PIL image to byte array
 def pil_img_to_byte_array(img: Image.Image) -> bytes:
+    img = img.convert("RGBA")
     img_bytes = BytesIO()
     if img.format is None:
         img.format = "PNG"
+
     img.save(img_bytes, format=img.format)
     if img is None:
         raise Exception("Image is Invalid")
@@ -41,3 +43,10 @@ def base64_to_pil(img_base64: str):
     img_bytes = base64.b64decode(img_base64)
     img = Image.open(BytesIO(img_bytes))
     return img
+
+
+# encode image to base64
+def pil_to_base64(img: Image.Image) -> str:
+    img_bytes = pil_img_to_byte_array(img)
+    img_base64 = base64.b64encode(img_bytes)
+    return img_base64.decode("utf-8")

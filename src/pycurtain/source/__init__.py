@@ -4,6 +4,7 @@ from pycurtain.source.craiyon import Craiyon
 from pycurtain.source.dalle2 import DALLE2
 from pycurtain.source.deep_ai import DeepAI
 from pycurtain.source.gpt3 import GPT3
+from pycurtain.source.replicate_stable_diffusion import ReplicateStableDiffusion
 from pycurtain.source.stable_diffusion import StabilityAI
 
 
@@ -13,6 +14,7 @@ class SourceType(Enum):
     DALLE2 = 2
     CRAIYON = 3
     GPT3 = 4
+    REPLICATE = 5
 
 
 class Source_AI():
@@ -29,5 +31,7 @@ class Source_AI():
             self.source = Craiyon()
         elif source_type == SourceType.GPT3:
             self.source = GPT3(api_key)
+        elif source_type == SourceType.REPLICATE:
+            self.source = ReplicateStableDiffusion(api_key)
         else:
             raise Exception("Invalid source type")

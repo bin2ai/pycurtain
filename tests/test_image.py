@@ -22,8 +22,12 @@ def test_generate(source_type: Source.SourceType):
 def test_edit(source_type: Source.SourceType):
     # arrange
     prompt = "a lab experiment test"
-    img_i = Image.open("tests\\test_001.png")
-    img_m = Image.open("tests\\test_001_mask.png")
+    img_i = Image.open("tests\\test.png")
+    # create circle mask
+    img_m = Image.new("L", img_i.size, 0)
+    draw = ImageDraw.Draw(img_m)
+    draw.ellipse((0, 0) + img_m.size, fill=255)
+
     source = Source.Source_AI(source_type=source_type)
     # act
     img_o_lst = Image_AI.edit(source=source, prompt=prompt,
@@ -110,7 +114,11 @@ if __name__ == "__main__":
     # test_vary(Source.SourceType.STABLE_DIFFUSION)
     # test_vary(Source.SourceType.DALLE2)
     # test_upscale(Source.SourceType.DEEP_AI)
-
     # test_generate(Source.SourceType.CRAIYON)
-    # test text summarize
+
+    # test replicate
+    # test_generate(Source.SourceType.REPLICATE)
+    # test_edit(Source.SourceType.REPLICATE)
+    # test_vary(Source.SourceType.REPLICATE)
+
     pass
