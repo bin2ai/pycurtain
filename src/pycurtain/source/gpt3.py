@@ -3,17 +3,19 @@ import os
 from typing import List, Tuple
 import openai
 from transformers import GPT2Tokenizer
+# local imports
+import pycurtain.secrete.stuff as shh
 
 
 class GPT3():
     def __init__(self, api_key: str = None):
         self.api_key = api_key
         if self.api_key is None:
-            self.api_key = os.environ.get("OPENAI_API_KEY")
+            self.api_key = os.environ.get(shh.OPENAI_API_KEY)
             if self.api_key is None:
                 raise Exception(
                     "OPENAI API KEY environment variable not found")
-        openai.api_key = os.getenv("OPENAI_API_KEY")
+        openai.api_key = os.getenv(self.api_key)
         self.tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
     # summarize prompt

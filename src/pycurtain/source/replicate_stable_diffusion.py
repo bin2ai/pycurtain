@@ -47,10 +47,8 @@ class ReplicateStableDiffusion():
     # function that validates width and hieghtheight" and is not larger than 1024x768 or 768x1024
 
     def __validate_size(self, width: Pixels, height: Pixels) -> Tuple[Pixels, Pixels]:
-        if width.value > 1024 and height.value > 768:
+        if width.value == 1024 and height.value > 768 or height.value == 1024 and width.value > 768:
             raise ValueError("width or height cannot be larger than 1024")
-        elif width.value > 768 and height.value > 1024:
-            raise ValueError("width or height cannot be larger than 768")
         else:
             return width, height
 
