@@ -43,7 +43,7 @@ A process is a way to combine multiple tasks together.  For example, you can con
 
 - [x] text_to_video_zoom (zoom in)
 
-![](https://github.com/bin2ai/pycurtain/text-to-video-zoom.gif)
+<img src="text-to-video-zoom.gif" width="256" height="256"/>
 
 ```python
 import pycurtain.process.text_to_video_zoom as text_to_video_zoom
