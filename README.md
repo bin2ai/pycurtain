@@ -41,7 +41,7 @@ text
 
 A process is a way to combine multiple tasks together.  For example, you can convert a sequence of images into a video.
 
-- [x] text_to_video_zoom (zoom in)
+- [x] text_to_video_zoom (zoom_in and_out)
 
 <img src="text-to-video-zoom.gif" width="256" height="256"/>
 
