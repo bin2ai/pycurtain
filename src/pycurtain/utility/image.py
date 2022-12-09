@@ -1,7 +1,6 @@
 import base64
 from io import BytesIO
-from PIL import Image
-import numpy as np
+from PIL import Image, ImageDraw
 import requests
 
 
@@ -123,6 +122,28 @@ def overlay(img1: Image.Image, img2: Image.Image) -> Image.Image:
     img2 = img2.convert("RGBA")
     img = Image.alpha_composite(img1, img2)
     return img
+
+
+# create a circle mask
+def create_circle_mask(size: tuple) -> Image.Image:
+    img_o = Image.new('L', size, 0)
+    draw = ImageDraw.Draw(img_o)
+    draw.ellipse((0, 0) + size, fill=255)
+    return img_o
+
+
+# turn black pixels into white, and white pixels into black
+def invert(img: Image.Image) -> Image.Image:
+    img_o = img.convert('RGBA')
+    data = img_o.getdata()
+    new_data = []
+    for item in data:
+        if item[0] == 0 and item[1] == 0 and item[2] == 0:
+            new_data.append((255, 255, 255, 255))
+        else:
+            new_data.append((0, 0, 0, 255))
+    img_o.putdata(new_data)
+    return img_o
 
 
 if __name__ == "__main__":

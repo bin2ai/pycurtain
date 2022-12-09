@@ -1,9 +1,9 @@
-# test task text summarize
-
+# local imports
 import pycurtain.source as Source
-import pycurtain.task.text as Text_AI
+from pycurtain.task import Text as Text_AI
 
 
+# test task text summarize
 def summarize(prompt: str, max_tokens: int = 100):
     # arrange
     source = Source.SourceImage(source_type=Source.SourceImageType.GPT3)

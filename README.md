@@ -46,7 +46,7 @@ A process is a way to combine multiple tasks together.  For example, you can con
 <img src="text-to-video-zoom.gif" width="256" height="256"/>
 
 ```python
-import pycurtain.process.text_to_video_zoom as text_to_video_zoom
+from pycurtain.process import text_to_video_zoom
 from pycurtain.source import SourceImageType
 text_to_video_zoom.zoom_in(prompts=["A grateful dead poster"], source=SourceImageType.STABLE_DIFFUSION, n_imgs=10, file_name="output.mp4")
 ```

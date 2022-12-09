@@ -14,7 +14,7 @@ setup(
     author='bin2ai',
     license='MIT',
     keywords='art, ai, deep learning, upscaling, img2img, text2img, style transfer, rest, rest api, wrapper',
-    version='0.0.1',
+    version='0.0.3',
     include_package_data=True,
     description='A community-maintained Python package for wrapping a variety of REST API calls for different AI art models.',
     long_description=long_description,
@@ -24,6 +24,9 @@ setup(
         'requests>=2.28.1',
         'stability-sdk>=0.2.9',
         'replicate>=0.4.0',
+        'imageio>=2.22.4',
+        'numpy>=1.23.5',
+
     ],
     extras_require={
         'dev': [

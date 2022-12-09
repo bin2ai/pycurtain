@@ -1,7 +1,7 @@
-# using numpy and imageio reverse the video
 import imageio
 
 
+# using numpy and imageio reverse the video
 def reverse_video(file_name: str):
     reader = imageio.get_reader(file_name)
     fps = reader.get_meta_data()['fps']

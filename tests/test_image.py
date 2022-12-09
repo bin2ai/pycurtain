@@ -1,12 +1,11 @@
 from typing import List
 from PIL import Image, ImageDraw
+# local imports
 import pycurtain.source as Source
 from pycurtain.task import Image as Image_AI
-from pycurtain.source import SourceImage, SourceImageType, SourceText, SourceTextType
+
 
 # test task\image\__init__.py generate
-
-
 def test_generate(source_type: Source.SourceImageType):
     # arrange
     prompt = "test"
@@ -73,33 +72,6 @@ def test_upscale(source_type: Source.SourceImageType):
 
     # assert
     assert img_o is not None
-
-
-# create a circle mask
-def create_circle_mask(size: tuple) -> Image.Image:
-    img_o = Image.new('L', size, 0)
-    draw = ImageDraw.Draw(img_o)
-    draw.ellipse((0, 0) + size, fill=255)
-    # invert the mask
-    # img_o = invert(img_o)
-    # transparent the mask
-    return img_o
-
-
-# turn black pixels into white, and white pixels into black
-def invert(img: Image.Image) -> Image.Image:
-    img_o = img.convert('RGBA')
-    data = img_o.getdata()
-
-    new_data = []
-    for item in data:
-        if item[0] == 0 and item[1] == 0 and item[2] == 0:
-            new_data.append((255, 255, 255, 255))
-        else:
-            new_data.append((0, 0, 0, 255))
-
-    img_o.putdata(new_data)
-    return img_o
 
 
 # main
