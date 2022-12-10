@@ -32,3 +32,8 @@ class TaskImage():
         # raise exception if this function is not overriden
         raise Exception(
             "upscale() function not implemented for this SourceImageType")
+
+    def interrogate(self, img: Image.Image) -> str:
+        # raise exception if this function is not overriden
+        raise Exception(
+            "interrogate() function not implemented for this SourceImageType")

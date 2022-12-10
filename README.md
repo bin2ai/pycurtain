@@ -30,6 +30,7 @@ image
 - [x] generate (text2img, creation)
 - [x] vary (img2img, style transfer)
 - [x] edit (img2img, with masks)
+- [x] interrogate (img2text, description)
 
 text
 

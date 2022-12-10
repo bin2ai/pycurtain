@@ -10,6 +10,11 @@ from pycurtain.source.protos.image import TaskImage
 
 # list all valid pixel scalars as enum
 
+img_model_name = "stability-ai/stable-diffusion"
+img_version = "27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478"
+interrogate_model_name = "methexis-inc/img2prompt"
+interrogate_version = "50adaf2d3ad20a6f911a8a9e3ccf777b263b8596fbd2c8fc26e8888f8a0edbb5"
+
 
 class Pixels(enum.Enum):
     pixels_128: int = 128
@@ -32,6 +37,18 @@ class ReplicateStableDiffusion(TaskImage):
     # find versions here
     # https://replicate.ai/stability-ai/stable-diffusion/versions
     version = None
+    model_name = None
+
+    def __set_model(self, model_name: str, version: str):
+        # if current model is not the same as the model_name, set model to model_name
+        if self.model_name == model_name and self.version == version:
+            return
+        if self.model_name != model_name:
+            self.model_name = model_name
+            self.model = replicate.models.get(self.model_name)
+        if self.version != version:
+            self.version = version
+            self.version = self.model.versions.get(self.version)
 
     def __init__(self, api_key: str = None):
         self.api_key = api_key
@@ -41,10 +58,6 @@ class ReplicateStableDiffusion(TaskImage):
             if self.api_key is None:
                 raise Exception(
                     "Replicate API Key not found. Please set the environment variable REPLICATE_API_TOKEN")
-
-        self.model = replicate.models.get("stability-ai/stable-diffusion")
-        self.version = self.model.versions.get(
-            "27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478")
 
     # function that validates width and hieghtheight" and is not larger than 1024x768 or 768x1024
 
@@ -57,6 +70,7 @@ class ReplicateStableDiffusion(TaskImage):
     # generate image from prompt
 
     def generate(self, prompt: str, width: Pixels = Pixels.pixels_512, height: Pixels = Pixels.pixels_512, seed: int = None) -> List[Image.Image]:
+        self.__set_model(img_model_name, img_version)
         width, height = self.__validate_size(width, height)
         url = self.version.predict(
             prompt=prompt,
@@ -70,6 +84,7 @@ class ReplicateStableDiffusion(TaskImage):
     # edit image from prompt
 
     def edit(self, prompt: str, img_m: Image.Image, img_i: Image.Image, width: Pixels = Pixels.pixels_512, height: Pixels = Pixels.pixels_512, seed: int = None) -> List[Image.Image]:
+        self.__set_model(img_model_name, img_version)
         width, height = self.__validate_size(width, height)
         img_i = pil_to_base64(img_i)
         img_m = pil_to_base64(img_m)
@@ -85,6 +100,7 @@ class ReplicateStableDiffusion(TaskImage):
         return [img]
 
     def vary(self, img_i: Image.Image, width: Pixels = Pixels.pixels_512, height: Pixels = Pixels.pixels_512, seed: int = None, prompt: str = None) -> List[Image.Image]:
+        self.__set_model(img_model_name, img_version)
         width, height = self.__validate_size(width, height)
         img_i = pil_to_base64(img_i)
         url = self.version.predict(
@@ -95,3 +111,9 @@ class ReplicateStableDiffusion(TaskImage):
         )[0]
         img = download_img(url)
         return [img]
+
+    def interrogate(self, img: Image.Image) -> str:
+        self.__set_model(interrogate_model_name, interrogate_version)
+        output = self.version.predict(
+            image='data:image/png;base64,{}'.format(pil_to_base64(img)))
+        return output
