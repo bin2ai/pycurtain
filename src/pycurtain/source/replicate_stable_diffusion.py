@@ -8,14 +8,17 @@ from pycurtain.utility.image import download_img, pil_to_base64
 import pycurtain.secrete.stuff as shh
 from pycurtain.source.protos.image import TaskImage
 
+
+class ReplicateModel():
+    model_name = None
+    version = None
+
+    def __init__(self, model_name: str, version: str):
+        self.model_name = model_name
+        self.version = version
+
+
 # list all valid pixel scalars as enum
-
-img_model_name = "stability-ai/stable-diffusion"
-img_version = "27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478"
-interrogate_model_name = "methexis-inc/img2prompt"
-interrogate_version = "50adaf2d3ad20a6f911a8a9e3ccf777b263b8596fbd2c8fc26e8888f8a0edbb5"
-
-
 class Pixels(enum.Enum):
     pixels_128: int = 128
     pixels_256: int = 256
@@ -32,6 +35,14 @@ class Pixels(enum.Enum):
     pixels_1024: int = 1024
 
 
+replicate_stable_diffusion = ReplicateModel(
+    model_name="stability-ai/stable-diffusion", version="27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478")
+replicate_mid_journey = ReplicateModel(
+    model_name="prompthero/openjourney", version="9936c2001faa2194a261c01381f90e65261879985476014a0a37a334593a05eb")
+replicate_interrogate = ReplicateModel(
+    model_name="methexis-inc/img2prompt", version="50adaf2d3ad20a6f911a8a9e3ccf777b263b8596fbd2c8fc26e8888f8a0edbb5")
+
+
 class ReplicateStableDiffusion(TaskImage):
 
     # find versions here
@@ -39,15 +50,15 @@ class ReplicateStableDiffusion(TaskImage):
     version = None
     model_name = None
 
-    def __set_model(self, model_name: str, version: str):
+    def __set_model(self, model: ReplicateModel):
         # if current model is not the same as the model_name, set model to model_name
-        if self.model_name == model_name and self.version == version:
+        if self.model_name == model.model_name and self.version == model.version:
             return
-        if self.model_name != model_name:
-            self.model_name = model_name
+        if self.model_name != model.model_name:
+            self.model_name = model.model_name
             self.model = replicate.models.get(self.model_name)
-        if self.version != version:
-            self.version = version
+        if self.version != model.version:
+            self.version = model.version
             self.version = self.model.versions.get(self.version)
 
     def __init__(self, api_key: str = None):
@@ -70,7 +81,7 @@ class ReplicateStableDiffusion(TaskImage):
     # generate image from prompt
 
     def generate(self, prompt: str, width: Pixels = Pixels.pixels_512, height: Pixels = Pixels.pixels_512, seed: int = None) -> List[Image.Image]:
-        self.__set_model(img_model_name, img_version)
+        self.__set_model(replicate_stable_diffusion)
         width, height = self.__validate_size(width, height)
         url = self.version.predict(
             prompt=prompt,
@@ -84,7 +95,7 @@ class ReplicateStableDiffusion(TaskImage):
     # edit image from prompt
 
     def edit(self, prompt: str, img_m: Image.Image, img_i: Image.Image, width: Pixels = Pixels.pixels_512, height: Pixels = Pixels.pixels_512, seed: int = None) -> List[Image.Image]:
-        self.__set_model(img_model_name, img_version)
+        self.__set_model(replicate_stable_diffusion)
         width, height = self.__validate_size(width, height)
         img_i = pil_to_base64(img_i)
         img_m = pil_to_base64(img_m)
@@ -100,7 +111,7 @@ class ReplicateStableDiffusion(TaskImage):
         return [img]
 
     def vary(self, img_i: Image.Image, width: Pixels = Pixels.pixels_512, height: Pixels = Pixels.pixels_512, seed: int = None, prompt: str = None) -> List[Image.Image]:
-        self.__set_model(img_model_name, img_version)
+        self.__set_model(replicate_stable_diffusion)
         width, height = self.__validate_size(width, height)
         img_i = pil_to_base64(img_i)
         url = self.version.predict(
@@ -113,7 +124,7 @@ class ReplicateStableDiffusion(TaskImage):
         return [img]
 
     def interrogate(self, img: Image.Image) -> str:
-        self.__set_model(interrogate_model_name, interrogate_version)
+        self.__set_model(replicate_interrogate)
         output = self.version.predict(
             image='data:image/png;base64,{}'.format(pil_to_base64(img)))
         return output
