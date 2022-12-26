@@ -40,7 +40,6 @@ jobs:
     - name: Build package and Binary Wheel
       run: python setup.py sdist bdist bdist_wheel
     - name: Publish package
-      if: startsWith(github.ref, 'ref/tags')
       uses: pypa/gh-action-pypi-publish@master
       with:
         repository_url: https://pypi.org/project/pycurtain/
