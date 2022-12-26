@@ -13,8 +13,9 @@ setup(
     url='https://github.com/bin2ai/pycurtain',
     author='bin2ai',
     license='MIT',
-    keywords='art, ai, deep learning, upscaling, img2img, text2img, style transfer, rest, rest api, wrapper',
-    version='0.0.3',
+    keywords=['art', 'ai', 'deep learning', 'upscaling', 'img2img', 'text2img',
+              'style transfer', 'rest', 'rest api', 'wrapper', 'ML Model', 'GPT', 'Open Ai'],
+    version='{{VERSION_PLACEHOLDER}}',
     include_package_data=True,
     description='A community-maintained Python package for wrapping a variety of REST API calls for different AI art models.',
     long_description=long_description,
@@ -42,8 +43,6 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3.10',
+        "Operating System :: Microsoft :: Windows",
     ]
 )
