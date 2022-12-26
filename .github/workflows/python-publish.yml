@@ -31,12 +31,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install build
     - name: Build package
-      run: python -m build
+      run: python -m build --sdist --wheel --outdir dist/
     - name: Publish package
       if: startsWith(github.ref, 'ref/tags')
       uses: pypa/gh-action-pypi-publish@master
       with:
         repository_url: https://pypi.org/project/pycurtain/
         password: ${{ secrets.PYPI_API_TOKEN }}
-
-        
