@@ -28,6 +28,6 @@ jobs:
       # Publish the package to PyPI
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@master
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        with:
+          username: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
