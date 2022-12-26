@@ -1,28 +1,32 @@
 import re
-import os
-
+# import os
+import sys
 import requests
 
-# Set the personal access token for the GitHub API
-personal_access_token = os.environ["PERSONAL_ACCESS_TOKEN"]
+if __name__ == "__main__":
+    # get PERSONAL_ACCESS_TOKEN from script arguments
+    personal_access_token = sys.argv[1]
 
-# Set the headers for the GitHub API request
-headers = {
-    "Authorization": f"Token {personal_access_token}"
-}
+    # Set the personal access token for the GitHub API
+    # personal_access_token = os.environ["PERSONAL_ACCESS_TOKEN"]
 
-# Get the latest tag from the repository
-response = requests.get(
-    "https://api.github.com/repos/bin2ai/pycurtain/tags", headers=headers)
-latest_tag = response.json()[0]["name"]
+    # Set the headers for the GitHub API request
+    headers = {
+        "Authorization": f"Token {personal_access_token}"
+    }
 
-# Read the setup.py file
-with open("setup.py", "r") as f:
-    setup_py = f.read()
+    # Get the latest tag from the repository
+    response = requests.get(
+        "https://api.github.com/repos/bin2ai/pycurtain/tags", headers=headers)
+    latest_tag = response.json()[0]["name"]
 
-# Update the version in the setup.py file
-setup_py = re.sub(r"version='[^']*'", f"version='{latest_tag}'", setup_py)
+    # Read the setup.py file
+    with open("setup.py", "r") as f:
+        setup_py = f.read()
 
-# Write the updated setup.py file
-with open("setup.py", "w") as f:
-    f.write(setup_py)
+    # Update the version in the setup.py file
+    setup_py = re.sub(r"version='[^']*'", f"version='{latest_tag}'", setup_py)
+
+    # Write the updated setup.py file
+    with open("setup.py", "w") as f:
+        f.write(setup_py)
