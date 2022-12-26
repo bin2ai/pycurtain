@@ -12,7 +12,7 @@ jobs:
     steps:
       # Checkout the repository
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@master
 
       # Install dependencies
       - name: Install dependencies
@@ -27,7 +27,7 @@ jobs:
 
       # Publish the package to PyPI
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@v1
+        uses: pypa/gh-action-pypi-publish@master
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
