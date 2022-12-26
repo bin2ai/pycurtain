@@ -17,7 +17,6 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: |
-          pip install -U setuptools twine
           python .github/scripts/update_release_version.py ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       # Build the package
