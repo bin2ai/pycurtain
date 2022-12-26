@@ -27,7 +27,8 @@ setup(
         'replicate>=0.4.0',
         'imageio>=2.22.4',
         'numpy>=1.23.5',
-
+        'openai>=0.25.0',
+        'transformers>=4.25.1',
     ],
     extras_require={
         'dev': [
