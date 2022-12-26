@@ -48,6 +48,16 @@ class Text():
         return source.source.tag(prompt=prompt)
 
 
+# list all public methods in image tasks
+def list_image_tasks():
+    return [e for e in Image.__dict__ if not e.startswith("__")]
+
+
+# list all public methods in text tasks
+def list_text_tasks():
+    return [e for e in Text.__dict__ if not e.startswith("__")]
+
+
 # test image task
 if __name__ == "__main__":
 

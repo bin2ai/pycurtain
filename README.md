@@ -17,10 +17,25 @@ There are tasks (image-related) and sources (AI art models) that are supported. 
 ```python
 import pycurtain
 
-source = pycurtain.source.SourceType.STABLE_DIFFUSION
-prompt = "A blooming flower in the middle of a desert"
-img_o = pycurtain.task.image.generate(source, prompt)[0]
-img_o.save('output.png')
+print(pycurtain.list_sources())
+''' serial output
+{'image': ['STABLE_DIFFUSION', 'DEEP_AI', 'DALLE2', 'CRAIYON', 'REPLICATE'], 'text': ['GPT3']}
+'''
+print(pycurtain.list_tasks())
+''' serial output
+{'image': ['edit', 'generate', 'vary', 'upscale'], 'text': ['summarize', 'fix_grammar', 'tag']}
+'''
+
+# first, set your source
+source = pycurtain.source.SourceImageType.CRAIYON
+# set task to generate
+task = pycurtain.task.Image(source)
+# set prompt
+prompt = "a wonderful day"
+# generate image(s)
+img = task.generate(prompt=prompt)
+# save image
+img[0].save("output.png")
 ```
 
 ## Supported Tasks

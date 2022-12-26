@@ -46,3 +46,13 @@ class SourceText():
             self.source = GPT3(api_key)
         else:
             raise Exception("Invalid source type")
+
+
+# list all sourceImage types
+def list_sourceImage_types():
+    return [e.name for e in SourceImageType]
+
+
+# list all sourceText types
+def list_sourceText_types():
+    return [e.name for e in SourceTextType]
