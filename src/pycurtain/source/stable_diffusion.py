@@ -72,12 +72,13 @@ class StabilityAI(TaskImage):
             prompt=prompt,
             mask_image=img_m,
             init_image=img_i,
-            sampler=generation.SAMPLER_K_DPM_2_ANCESTRAL,
+            sampler=generation.SAMPLER_K_DPM_2,
             seed=seed,
-            guidance_preset=generation.GUIDANCE_PRESET_SIMPLE,
-            guidance_strength=0.75,
-            start_schedule=0.7,
-            end_schedule=0.01,
+            # guidance_preset=generation.GUIDANCE_PRESET_SIMPLE,
+            # guidance_strength=0.75,
+            start_schedule=1.0,
+            # end_schedule=0.01,
+            cfg_scale=8.0,
         )
 
         img_o = self.__download_img(answers)
